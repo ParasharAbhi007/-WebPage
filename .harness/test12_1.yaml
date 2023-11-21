@@ -49,3 +49,25 @@ template:
                 - name: RELEASE_NAME
                   type: String
                   value: <+input>
+      - stage:
+          name: two
+          identifier: two
+          template:
+            templateRef: customstage
+            versionLabel: "1"
+            templateInputs:
+              type: Custom
+              spec:
+                execution:
+                  steps:
+                    - step:
+                        identifier: ShellScript_1
+                        type: ShellScript
+                        spec:
+                          environmentVariables:
+                            - name: test
+                              type: String
+                              value: <+input>
+                            - name: test2
+                              type: String
+                              value: <+input>
