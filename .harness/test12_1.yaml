@@ -1,0 +1,51 @@
+template:
+  name: test12
+  identifier: test12
+  versionLabel: "1"
+  type: Pipeline
+  projectIdentifier: CSETest1
+  orgIdentifier: AbhiOrg
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: one
+          identifier: one
+          template:
+            templateRef: account.Stage_Template_Multiple_Rolling_Deploy
+            versionLabel: V1.0.0
+            templateInputs:
+              type: Deployment
+              spec:
+                services:
+                  values: <+input>
+                environments:
+                  values: <+input>
+              variables:
+                - name: COMMIT_SHA
+                  type: String
+                  value: <+input>
+                - name: DEPLOYMENT_PLATFORM
+                  type: String
+                  value: <+input>
+                - name: HELM_CHART_VERSION
+                  type: String
+                  value: <+input>
+                - name: HELM_CONNECTOR
+                  type: String
+                  value: <+input>
+                - name: TARGET_ENV
+                  type: String
+                  value: <+input>
+                - name: GITHUB_CONNECTOR
+                  type: String
+                  value: <+input>
+                - name: CLUSTER_CONNECTOR
+                  type: String
+                  value: <+input>
+                - name: K8S_NAMESPACE
+                  type: String
+                  value: <+input>
+                - name: RELEASE_NAME
+                  type: String
+                  value: <+input>
