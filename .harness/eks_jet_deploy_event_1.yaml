@@ -1,0 +1,121 @@
+template:
+  name: eks_jet_deploy_event
+  type: Step
+  versionLabel: "1"
+  spec:
+    type: Http
+    spec:
+      url: <+variable.account.JET_DEPLOY_EVENT_URL>
+      method: POST
+      headers:
+        - key: Content-Type
+          value: application/json
+      inputVariables:
+        - name: branch
+          value: <+input>
+          type: String
+        - name: repoName
+          value: <+input>
+          type: String
+        - name: jetId
+          value: <+input>
+          type: String
+        - name: sealId
+          value: <+input>
+          type: String
+        - name: jetProjectName
+          value: <+input>
+          type: String
+        - name: artifactLocation
+          value: <+input>
+          type: String
+        - name: cluster
+          value: <+input>
+          type: String
+        - name: targetEnvironment
+          value: <+input>
+          type: String
+        - name: endpoint
+          value: <+input>
+          type: String
+        - name: namespace
+          value: <+input>
+          type: String
+        - name: changeCtrlTicket
+          value: <+input>
+          type: String
+        - name: bitbucketProjectKey
+          value: <+input>
+          type: String
+        - name: versionTag
+          value: <+input>
+          type: String
+        - name: tollGateComments
+          value: <+spec.execution.steps.Release_Tollgate.steps.Manual_Tollgate.output.approvalActivities[0].comments>
+          type: String
+        - name: tollGateUser
+          value: <+spec.execution.steps.Release_Tollgate.steps.Manual_Tollgate.output.approvalActivities[0].user.name>
+          type: String
+        - name: accountIdentifier
+          value: accountIdentifier=<+account.identifier>
+          type: String
+        - name: orgIdentifier
+          value: orgIdentifier=<+org.identifier>
+          type: String
+        - name: projectIdentifier
+          value: projectIdentifier=<+project.identifier>
+          type: String
+        - name: pipelineIdentifier
+          value: pipelineIdentifier=<+pipeline.identifier>
+          type: String
+        - name: sequenceId
+          value: <+pipeline.sequenceId>
+          type: String
+        - name: planExecutionId
+          value: planExecutionId=<+pipeline.executionId>
+          type: String
+        - name: stageId
+          value: stageId=<+stage.identifier>
+          type: String
+      outputVariables: []
+      requestBody: |2-
+            {
+                "branch": "<+spec.inputVariables.branch>",
+                "repoName": "<+spec.inputVariables.repoName>",
+                "jetId": "<+spec.inputVariables.jetId>",
+                "sealId": "<+spec.inputVariables.sealId>",
+                "projectName": "<+spec.inputVariables.jetProjectName>",
+                "bitbucketProjectKey": "<+spec.inputVariables.bitbucketProjectKey>",
+                "versionTag": "<+spec.inputVariables.versionTag>",
+                "buildUrl": "<+spec.inputVariables.accountIdentifier>&<+spec.inputVariables.orgIdentifier>&<+spec.inputVariables.projectIdentifier>&<+spec.inputVariables.pipelineIdentifier>&executionId=<+spec.inputVariables.sequenceId>&<+spec.inputVariables.planExecutionId>&<+spec.inputVariables.stageId>",
+
+                "eksDeployment":{
+                    "cluster": "<+spec.inputVariables.cluster>",
+                    "deployTool": "HARNESS",
+                    "endpoint": "<+spec.inputVariables.endpoint>",
+                    "namespace": "<+spec.inputVariables.namespace>",
+                    "targetEnvironment": "<+"<+spec.inputVariables.targetEnvironment>".replace("EKS_","").replace("eks_","").replace("ECS_","").replace("ecs_","")>",
+                    "artifactLocation": "<+spec.inputVariables.artifactLocation>",
+                    "changeCtrlTicket": "<+spec.inputVariables.changeCtrlTicket>",
+                    "tollGateComments": ""
+                }
+            }
+      assertion: <+httpResponseCode> == 201
+    timeout: 50s
+    when:
+      stageStatus: Success
+      condition: <+<+spec.inputVariables.branch> =~ ["master","Prod","main","develop"] || <+spec.inputVariables.branch>.toLowerCase().startsWith("rollback") || <+spec.inputVariables.branch>.toLowerCase().startsWith("release") || <+spec.inputVariables.branch>.toLowerCase().startsWith("hotfix")>
+    failureStrategies:
+      - onFailure:
+          errors:
+            - AllErrors
+          action:
+            type: Retry
+            spec:
+              onRetryFailure:
+                action:
+                  type: Ignore
+              retryCount: 3
+              retryIntervals:
+                - 3s
+  identifier: eks_jet_deploy_event
