@@ -12,3 +12,6 @@ spec:
   - system:account.default.Abhi/testsystem
   ownedBy:
   - user:account/manisha.choudhary@harness.io
+metadata:
+  tags:
+  - hello
