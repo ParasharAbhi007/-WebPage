@@ -8,5 +8,7 @@ orgIdentifier: default
 projectIdentifier: Abhi
 spec:
   lifecycle: prod
+  system:
+  - system:account.default.Abhi/testsystem
   ownedBy:
   - user:account/manisha.choudhary@harness.io
