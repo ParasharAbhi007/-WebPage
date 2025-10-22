@@ -16,3 +16,4 @@ metadata:
     backstage.io/techdocs-ref: dir:.
   tags:
   - hello
+  - test
