@@ -1,0 +1,9 @@
+site_name: 'Example Documentation'
+repo_url: https://github.com/ParasharAbhi007/-WebPage
+edit_uri: https://github.com/ParasharAbhi007/-WebPage/blob/master/.harness/docs/index.md
+
+nav:
+  - Home: index.md
+
+plugins:
+  - techdocs-core
