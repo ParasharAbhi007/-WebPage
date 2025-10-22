@@ -12,6 +12,7 @@ spec:
   - user:account/manisha.choudhary@harness.io
   - user:account/abhinandan.parashar@harness.io
 metadata:
-  metadata: backstage.io/techdocs-ref:dir:.
+  annotations:
+    backstage.io/techdocs-ref: dir:.
   tags:
   - hello
