@@ -1,8 +1,8 @@
 apiVersion: harness.io/v1
 kind: Component
 type: service
-identifier: aiptest
-name: aiptest
+identifier: aiptesttwo
+name: aiptesttwo
 owner: user:account/abhinandan.parashar@harness.io
 orgIdentifier: AbhiOrg
 projectIdentifier: CSETest1
